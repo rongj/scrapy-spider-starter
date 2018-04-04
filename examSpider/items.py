@@ -27,3 +27,22 @@ class UniversityItem(scrapy.Item):
 			self['address'], self['address_short'], self['university'], self['type'], self['url'], 
 		)
 		return insert_sql, params
+
+
+class ExamSiteItemLoader(ItemLoader):
+	default_output_processor = TakeFirst()
+
+class ExamSiteItem(scrapy.Item):
+	exam_type = scrapy.Field()
+	exam_title = scrapy.Field()
+	exam_name = scrapy.Field()
+	exam_url = scrapy.Field()
+
+	def get_insert_sql(self):
+		insert_sql = """
+			insert into examsites(exam_type, exam_title, exam_name, exam_url) values (%s, %s, %s, %s)
+		"""
+		params = (
+			self['exam_type'], self['exam_title'], self['exam_name'], self['exam_url'],
+		)
+		return insert_sql, params
