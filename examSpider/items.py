@@ -46,3 +46,20 @@ class ExamSiteItem(scrapy.Item):
 			self['exam_type'], self['exam_title'], self['exam_name'], self['exam_url'],
 		)
 		return insert_sql, params
+
+
+class JiaotongItemLoader(ItemLoader):
+	default_output_processor = TakeFirst()
+
+class JiaotongItem(scrapy.Item):
+	city = scrapy.Field()
+	area = scrapy.Field()
+
+	def get_insert_sql(self):
+		insert_sql = """
+			insert into areas(city, area) values (%s, %s)
+		"""
+		params = (
+			self['city'], self['area'],
+		)
+		return insert_sql, params
