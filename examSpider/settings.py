@@ -9,6 +9,8 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
+import os
+
 BOT_NAME = 'examSpider'
 
 SPIDER_MODULES = ['examSpider.spiders']
@@ -67,7 +69,12 @@ ROBOTSTXT_OBEY = False
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
 	'examSpider.pipelines.MysqlTwistedPipeline': 3,
+	'examSpider.pipelines.ArticleImagePipeline': 1,
 }
+
+IMAGES_URLS_FIELD = "cover_img"
+project_dir = os.path.abspath(os.path.dirname(__file__))
+IMAGES_STORE = os.path.join(project_dir, 'images')
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

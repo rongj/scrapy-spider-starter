@@ -9,6 +9,7 @@ import MySQLdb
 import MySQLdb.cursors
 
 from twisted.enterprise import adbapi
+from scrapy.pipelines.images import ImagesPipeline
 
 class MysqlPipeline(object):
 	def __init__(self):
@@ -54,3 +55,20 @@ class MysqlTwistedPipeline(object):
 	def do_insert(self, cursor, item):
 		insert_sql, params = item.get_insert_sql()
 		cursor.execute(insert_sql, params)
+
+
+class ArticleImagePipeline(ImagesPipeline):
+	# 修改图片存储路径
+	# def file_path(self, request, response=None, info=None):  
+	# 	image_name = request.meta['item']['cover_img']
+	# 	print('*'*100)
+	# 	print(image_name)
+	# 	path = 'cover/'+image_name+'/'+request.url[-4:].strip('/')+'.jpg'  
+	# 	return path
+	        # path = 'full/'+image_name+'/'+request.url[-4:].strip('/')+'.jpg'  
+	        # return path
+
+	def item_completed(self, results, item, info):
+		for ok, value in results:
+			item['cover_img'] = value['path']
+		return item

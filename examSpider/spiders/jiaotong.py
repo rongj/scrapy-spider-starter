@@ -2,7 +2,7 @@
 import scrapy
 import time
 
-from examSpider.items import JiaotongItem, JiaotongItemLoader
+from examSpider.items import JiaotongItem
 from selenium import webdriver
 from scrapy.xlib.pydispatch import dispatcher
 from scrapy import signals
@@ -45,8 +45,7 @@ class JiaotongSpider(scrapy.Spider):
 			post_nodes = s_selector.css('.sub-areas li.cur')
 			# print('-'*20+str(len(post_nodes)))
 			for post_node in post_nodes:
-				item_loader = JiaotongItemLoader(item=JiaotongItem())
-				item_loader.add_value('city', post_node.css('a::text').extract_first(''))
-				item_loader.add_value('area', area_title)
-				jiaotong_item = item_loader.load_item()
+				jiaotong_item = JiaotongItem()
+				jiaotong_item['city'] = post_node.css('a::text').extract_first('')
+				jiaotong_item['area'] = area_title
 				yield jiaotong_item
